@@ -1,3 +1,4 @@
+(* pp $PP *)
 (* Simple example for event-based engines *)
 
 open Printf
