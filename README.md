@@ -1,4 +1,4 @@
-Web app
+Web app [![Build Status](https://travis-ci.org/mamewotoko/list_webml.svg?branch=master)](https://travis-ci.org/mamewotoko/list_webml)
 =======
 Overview
 --------
