@@ -7,7 +7,7 @@ let generate (cgi : Netcgi.cgi_activation) =
   (* A Netcgi-based content provider *)
   cgi # set_header
     ~cache:`No_cache
-    ~content_type:"text/html; charset=\"iso-8859-1\""
+    ~content_type:"text/html; charset=\"utf-8\""
     ();
   let data =
     "<html>\n" ^
