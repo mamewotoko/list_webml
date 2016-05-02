@@ -4,6 +4,6 @@ install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.t
 script:
   - bash -ex .travis-ocaml.sh
   - opam install -y ocamlnet
-  - make
+  - eval `opam config env` && make
 env:
   - OCAML_VERSION=4.02
