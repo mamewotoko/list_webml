@@ -13,12 +13,8 @@ let generate (cgi : Netcgi.cgi_activation) =
     "<html>\n" ^
     "  <head><title>Easy Engine</title></head>\n" ^
     "  <body>\n" ^
-    "    <a href='foo'>GET something</a><br>\n" ^
-    "    <form method=POST encoding='form-data'>\n" ^
-    "      <input type=hidden name=sample value='sample'>\n" ^
-    "      <input type=submit value='POST something'>\n" ^
-    "    </form>\n" ^
-    "  </body>\n" ^
+"Hello list" ^
+"  </body>\n" ^
     "</html>" in
   cgi # output # output_string data;
   cgi # output # commit_work();

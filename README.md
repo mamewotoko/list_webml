@@ -10,21 +10,26 @@ Overview
 
 Build
 -----
+1. install ocaml
+2. install opam
+3.```
+opam install -y nethttpd
 ```
-make all
+4. build
+```
+make 
 ```
 
 Run
 ---
 1. start
 ```
-./list_webml.byte 9090
+./list_webml 9090
 ```
 2. browse http://localhost:9090/
 
 TODO
 ----
-* use OCamlMakefile?
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >
