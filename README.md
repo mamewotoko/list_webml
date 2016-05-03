@@ -47,6 +47,7 @@ Files
 
 TODO
 ----
+* use [ocsigen](http://ocsigen.org/)
 * get external xml using HTTP
   * async job
 * simple configuration to serve static file
