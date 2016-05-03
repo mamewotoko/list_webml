@@ -4,7 +4,7 @@ USER opam
 RUN mkdir /home/opam/build
 RUN chown opam /home/opam/build
 RUN opam update
-RUN opam install -y ocamlnet
+RUN opam install -y ocamlnet xmlplaylist uri
 #webapp
 EXPOSE 8080
 VOLUME ["/home/opam/build"]
