@@ -3,6 +3,7 @@ Web app [![Build Status](https://travis-ci.org/mamewotoko/list_webml.svg?branch=
 Overview
 --------
 * display and edit list on web
+* run on host or docker container
 
 Build (on host)
 ---------------
