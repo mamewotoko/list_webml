@@ -3,16 +3,13 @@ Web app [![Build Status](https://travis-ci.org/mamewotoko/list_webml.svg?branch=
 Overview
 --------
 * display lists
-* get external xml using HTTP
-  * async job
-* login
-* database
 
 Build
 -----
 1. install ocaml
 2. install opam
-3.```
+3. install nethttpd package
+```
 opam install -y nethttpd
 ```
 4. build
@@ -28,8 +25,21 @@ Run
 ```
 2. browse http://localhost:9090/
 
+Files
+-----
+ list_web: binary
+ resource/: css, javascript served as static file
+ src/: source
+
 TODO
 ----
+* get external xml using HTTP
+  * async job
+* simple configuration to serve static file
+  * use other http server?
+* cache 
+* login
+* database
 
 ----
 Takashi Masuyama < mamewotoko@gmail.com >

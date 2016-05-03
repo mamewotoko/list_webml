@@ -1,9 +1,35 @@
-(* pp $PP *)
-(* Simple example for event-based engines *)
-
 open Printf
-
+open Nethttp_client.Convenience
+  
+(* cannot get icon ... *)
+(* cannot get title of rss ... *)
+let track2html track =
+  let metadata, uri = track in
+  let title =
+    try
+      List.assoc "title" metadata
+    with Not_found -> "" in
+  let pubdate =
+    try
+      List.assoc "pubdate" metadata
+    with Not_found -> "" in
+  (* sprintf "<div><a href=\"#\" class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></a></div>\n" *)
+(* 	  title pubdate uri *)
+  sprintf "<li class=\"list-group-item\">%s %s</li>\n"
+ 	  title pubdate 
+;;
+	    
+(* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
+  let req = http_get_message "http://www.tbsradio.jp/ijuin/rss.xml" in
+  let listdata = 
+    match req # status with
+      `Successful ->
+      let xmlstr = req # response_body # value in
+      let format = Xmlplaylist.Podcast in
+      let tracks = Xmlplaylist.tracks ~format xmlstr in
+      String.concat "" (List.map track2html tracks)
+    | _ -> "" in
   (* A Netcgi-based content provider *)
   cgi # set_header
     ~cache:`No_cache
@@ -11,16 +37,24 @@ let generate (cgi : Netcgi.cgi_activation) =
     ();
   let data =
     "<html>\n" ^
-    "  <head><title>Easy Engine</title></head>\n" ^
-    "  <body>\n" ^
-"Hello list" ^
-"  </body>\n" ^
-    "</html>" in
+      "  <head><title>List</title>"^
+	"<meta name=\"viewport\" content=\"width=device-width\" />"^
+	  "<link rel=\"stylesheet\" href=\"/resource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" ^
+	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
+	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
+       "</head>\n" ^
+	"  <body><div class=\"container\"><ul class=\"list-group\">\n" ^
+	  listdata ^
+	    "</div></body>\n" ^
+	      "</html>" in
   cgi # output # output_string data;
-  cgi # output # commit_work();
+  cgi # output # commit_work()
 ;;
 
-let on_request notification =
+let resource_path_regexp = Str.regexp "^/resource/"
+;;
+  
+let on_request notification = 
   (* This function is called when the full HTTP request has been received. For
    * simplicity, we create a [std_activation] to serve the request.
    *
@@ -33,19 +67,31 @@ let on_request notification =
    * the response buffer, the advanced implementation can prevent that the
    * buffers become large.
    *)
-  printf "Received HTTP request\n";
-  flush stdout;
-  ( try
+  (try
       let env =
         notification # environment in
-      let cgi =
-        Netcgi_common.cgi_with_args
-          (new Netcgi_common.cgi)
-          (env :> Netcgi.cgi_environment)
-          Netcgi.buffered_transactional_outtype
-          env#input_channel
-          (fun _ _ _ -> `Automatic) in
-      generate cgi;
+      let request_uri = env # cgi_request_uri |> Uri.of_string in
+      let path = Uri.path request_uri in
+      if "/" = path then
+	let cgi =
+          Netcgi_common.cgi_with_args
+            (new Netcgi_common.cgi)
+            (env :> Netcgi.cgi_environment)
+            Netcgi.buffered_transactional_outtype
+            env#input_channel
+            (fun _ _ _ -> `Automatic) in
+	generate cgi;
+      else if Str.string_match resource_path_regexp path 0 then
+      	let localpath = "."^path in
+      	let length = (Unix.stat localpath).Unix.st_size |> Int64.of_int in 
+      	let fd = Unix.openfile localpath [Unix.O_RDONLY; Unix.O_NONBLOCK] 0o640 in
+	if Filename.check_suffix localpath ".css" then
+	  env # set_output_header_field "Content-Type" "text/css"
+	else if Filename.check_suffix localpath ".js" then
+	  env # set_output_header_field "Content-Type" "text/javascript"
+	else if Filename.check_suffix localpath ".png" then
+	  env # set_output_header_field "Content-Type" "image/png";
+      	env # send_file fd length;
     with e ->
       printf "Uncaught exception: %s\n" (Printexc.to_string e);
       flush stdout
@@ -61,8 +107,6 @@ let on_request_header (notification : Nethttpd_engine.http_request_header_notifi
    * additional function would be called whenever new body data arrives. (Do so by
    * calling [notification # environment # input_ch_async # request_notification].)
    *)
-  printf "Received HTTP header\n";
-  flush stdout;
   notification # schedule_accept_body ~on_request ()
 ;;
 
@@ -139,6 +183,10 @@ let conf_debug() =
 ;;
 
 let _ =
+  if Array.length Sys.argv != 2 then (
+    print_endline ("Usage: "^Sys.argv.(0)^" PORT");
+    exit 1
+  );
   let port =
     int_of_string Sys.argv.(1)
   in
