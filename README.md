@@ -9,36 +9,36 @@ Build (on host)
 ---------------
 1. [install ocaml & opam](https://ocaml.org/docs/install.html)
 2. install nethttpd package
-  ```
-  opam install -y nethttpd
-  ```
+    ```
+    opam install -y nethttpd
+    ```
 3. build
-  ```
-  make 
-  ```
+    ```
+    make 
+    ```
 
 Run (on host)
 ------------
 1. start app
-  ```
-  ./list_webml 8080
-  ```
+    ```
+    ./list_webml 8080
+    ```
 2. browse http://localhost:8080/
 
 Build & Run (on docker container)
 --------------------------------
 1. build and run docker container
-  ```
+    ```
   sh run_on_docker.sh
-  ```
+    ```
 2. browse http://localhost:8080/
 
 Stop (on docker container)
 --------------------------
 1.
-  ```
+    ```
   sh stop_on_docker.sh
-  ```
+    ```
 
 Files
 -----
