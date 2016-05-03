@@ -47,11 +47,10 @@ Files
 
 TODO
 ----
-* use [ocsigen](http://ocsigen.org/)
 * get external xml using HTTP
   * async job
 * simple configuration to serve static file
-  * use other http server?
+  * use other http server like [ocsigen](http://ocsigen.org/)
   * use "404 Not Found" instead of "500 Internal Server Error"
     when requested resource is not found
 * access log
