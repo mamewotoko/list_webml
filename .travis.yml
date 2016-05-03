@@ -2,7 +2,7 @@ language: c
 sudo: required
 script:
   - bash -ex .travis-ocaml.sh
-  - opam install -y ocamlnet
+  - opam install -y ocamlnet xmlplaylist uri
   - eval `opam config env` && make
 env:
   - OCAML_VERSION=4.02
