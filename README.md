@@ -20,6 +20,7 @@ Build (on host)
 Run (on host)
 ------------
 1. start app
+
     ```
     ./list_webml 8080
     ```
@@ -28,16 +29,18 @@ Run (on host)
 Build & Run (on docker container)
 --------------------------------
 1. build and run docker container
+
     ```
-  sh run_on_docker.sh
+    sh run_on_docker.sh
     ```
 2. browse http://localhost:8080/
 
 Stop (on docker container)
 --------------------------
-1.
+1. stop 
+
     ```
-  sh stop_on_docker.sh
+    sh stop_on_docker.sh
     ```
 
 Files
