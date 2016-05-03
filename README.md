@@ -21,9 +21,9 @@ Run (on host)
 ------------
 1. start
 ```
-./list_webml 9090
+./list_webml 8080
 ```
-2. browse http://localhost:9090/
+2. browse http://localhost:8080/
 
 Build & Run (on docker container)
 --------------------------------
@@ -31,6 +31,7 @@ Build & Run (on docker container)
 ```
 sh run_on_docker.sh
 ```
+2. browser http://localhost:8080/
 
 Stop (on docker container)
 --------------------------
