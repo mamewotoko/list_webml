@@ -2,13 +2,12 @@ Web app [![Build Status](https://travis-ci.org/mamewotoko/list_webml.svg?branch=
 =======
 Overview
 --------
-* display lists
+* display and edit list on web
 
 Build (on host)
 ---------------
-1. install ocaml
-2. install opam
-3. install nethttpd package
+1. [install ocaml & opam](https://ocaml.org/docs/install.html)
+2. install nethttpd package
 ```
 opam install -y nethttpd
 ```
@@ -61,4 +60,3 @@ TODO
 ----
 Takashi Masuyama < mamewotoko@gmail.com >
 http://mamewo.ddo.jp/
-

@@ -3,9 +3,10 @@ MAINTAINER Takashi Masuyama <mamewotoko@gmail.com>
 USER opam
 RUN mkdir /home/opam/build
 RUN chown opam /home/opam/build
+WORKDIR /home/opam
 RUN opam update
-## TODO: put install script to parent directory and share with travis
-RUN opam install -y ocamlnet xmlplaylist uri
+ADD setup-opam ./setup-opam
+RUN sh setup-opam
 
 EXPOSE 8080
 VOLUME ["/home/opam/build"]

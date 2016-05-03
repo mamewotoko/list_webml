@@ -6,10 +6,10 @@ CLIENT_SAMPLE_OPTS = RESULT=client_sample SOURCES=src/client.ml PACKS=netclient
 all: list_webml client_sample
 
 list_webml: src/main.ml
-	make -f $(OCAMLMAKEFILE) $(LIST_WEBML_OPTS)
+	make -f $(OCAMLMAKEFILE) $(LIST_WEBML_OPTS) nc
 
 client_sample: src/client.ml
-	make -f $(OCAMLMAKEFILE) $(CLIENT_SAMPLE_OPTS)
+	make -f $(OCAMLMAKEFILE) $(CLIENT_SAMPLE_OPTS) nc
 
 clean:
 	make -f $(OCAMLMAKEFILE) $(LIST_WEBML_OPTS) clean
