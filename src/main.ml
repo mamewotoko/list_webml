@@ -26,8 +26,7 @@ let track2html aslink track =
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
   let req = http_get_message "http://www.tbsradio.jp/ijuin/rss.xml" in
-  (* TODO: get from cgi param *)
-  let aslink = true in
+  let aslink = cgi # argument_exists "aslink" in
   let listdata = 
     match req # status with
       `Successful ->
