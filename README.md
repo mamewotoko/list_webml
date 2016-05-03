@@ -4,8 +4,8 @@ Overview
 --------
 * display lists
 
-Build
------
+Build (on host)
+---------------
 1. install ocaml
 2. install opam
 3. install nethttpd package
@@ -17,19 +17,33 @@ opam install -y nethttpd
 make 
 ```
 
-Run
----
+Run (on host)
+------------
 1. start
 ```
 ./list_webml 9090
 ```
 2. browse http://localhost:9090/
 
+Build & Run (on docker container)
+--------------------------------
+1. 
+```
+sh run_on_docker.sh
+```
+
+Stop (on docker container)
+--------------------------
+1.
+```
+sh stop_on_docker.sh
+```
+
 Files
 -----
- list_web: binary
- resource/: css, javascript served as static file
- src/: source
+* list_web: binary
+* resource/: css, javascript served as static file
+* src/: source
 
 TODO
 ----

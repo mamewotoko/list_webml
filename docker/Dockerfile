@@ -4,8 +4,9 @@ USER opam
 RUN mkdir /home/opam/build
 RUN chown opam /home/opam/build
 RUN opam update
+## TODO: put install script to parent directory and share with travis
 RUN opam install -y ocamlnet xmlplaylist uri
-#webapp
+
 EXPOSE 8080
 VOLUME ["/home/opam/build"]
 WORKDIR /home/opam/build
