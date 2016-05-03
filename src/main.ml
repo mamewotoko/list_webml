@@ -15,8 +15,8 @@ let track2html track =
     with Not_found -> "" in
   (* sprintf "<div><a href=\"#\" class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></a></div>\n" *)
 (* 	  title pubdate uri *)
-  sprintf "<li class=\"list-group-item\">%s %s</li>\n"
- 	  title pubdate 
+  sprintf "<li class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></audio></li>\n"
+ 	  title pubdate uri
 ;;
 	    
 (* TODO: call podcast fetch part in async way *)
@@ -114,8 +114,6 @@ let serve_connection ues fd =
   (* Creates the http engine for the connection [fd]. When a HTTP header is received
    * the function [on_request_header] is called.
    *)
-  printf "Connected\n";
-  flush stdout;
   let config = Nethttpd_engine.default_http_engine_config in
   Unix.set_nonblock fd;
   let _ =

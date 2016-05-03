@@ -37,6 +37,9 @@ TODO
   * async job
 * simple configuration to serve static file
   * use other http server?
+  * use "404 Not Found" instead of "500 Internal Server Error"
+    when requested resource is not found
+* access log
 * cache 
 * login
 * database
