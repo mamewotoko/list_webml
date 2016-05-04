@@ -57,10 +57,11 @@ let generate (cgi : Netcgi.cgi_activation) =
     ~content_type:"text/html; charset=\"utf-8\""
     ();
   let data =
-    "<html>\n" ^
-      "  <head><title>PodplayerWeb</title>"^
-	"<meta name=\"viewport\" content=\"width=device-width\" />"^
-	  "<link rel=\"stylesheet\" href=\"/resource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" ^
+    "<html lang-\"ja\"><head><title>PodplayerWeb</title>\n"^
+      "<meta charset=\"utf-8\" />"^
+      "<meta name=\"viewport\" content=\"width=device-width\" />\n"^
+	"<link rel=\"stylesheet\" href=\"/resource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" ^
+	"<link rel=\"stylesheet\" href=\"/resource/css/main.css\" type=\"text/css\" />\n" ^
 	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
 	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
        "</head>\n" ^
@@ -77,7 +78,7 @@ let generate (cgi : Netcgi.cgi_activation) =
 		  Link -> "</div>"
 		| DataSource -> "</ul>"
 		| Audio -> "</ul>") ^
-	      "</body></html>" in
+	      "</div></body></html>" in
   cgi # output # output_string data;
   cgi # output # commit_work()
 ;;

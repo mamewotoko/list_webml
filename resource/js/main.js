@@ -17,9 +17,22 @@ $(function(){
 	// TODO: last item?
 	audio[0].play();
     }
-   
+    //TODO: handle space key: pause & play active item
+    //TODO: up/down key to select item
+    
     $(".episode").click(function(){
-	play_item($(this));
+	console.log("class: " + $(this).hasClass("active"));
+	if($(this).hasClass("active")){
+	    if(audio[0].paused){
+		audio[0].play();
+	    }
+	    else {
+		audio[0].pause();
+	    }
+	}
+	else {
+	    play_item($(this));
+	}
     });
     prepare_item($(".episode").first());
 });
