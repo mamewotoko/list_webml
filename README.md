@@ -51,7 +51,7 @@ Files
 
 TODO
 ----
-* get external xml using HTTP
+* get podcast xml using HTTP
   * async job
 * simple configuration to serve static file
   * use other http server like [ocsigen](http://ocsigen.org/)
@@ -60,6 +60,7 @@ TODO
 * access log
 * cache 
 * login
+  * with google account?
 * database
 
 ----

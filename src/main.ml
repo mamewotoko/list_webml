@@ -1,9 +1,12 @@
 open Printf
 open Nethttp_client.Convenience
-  
+
+type expresssion =  Link | Audio | DataSource
+;;
+
 (* cannot get icon ... *)
 (* cannot get title of rss ... *)
-let track2html aslink track =
+let track2html expresssion track =
   let metadata, uri = track in
   let title =
     try
@@ -13,27 +16,33 @@ let track2html aslink track =
     try
       List.assoc "pubdate" metadata
     with Not_found -> "" in
-  (* sprintf "<div><a href=\"#\" class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></a></div>\n" *)
-  (* 	  title pubdate uri *)
-  if aslink then
-    sprintf "<a class=\"list-group-item\" href=\"%s\">%s %s</a>\n"
- 	    uri title pubdate
-  else
-    sprintf "<li class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></audio></li>\n"
- 	    title pubdate uri
+  match expresssion with
+    Link -> sprintf "<a class=\"list-group-item\" href=\"%s\">%s %s</a>\n"
+ 		    uri title pubdate
+  | DataSource -> sprintf "<li class=\"list-group-item episode\" data-source=\"%s\">%s %s</li>\n"
+ 			  uri title pubdate
+  | Audio -> sprintf "<li class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></audio></li>\n"
+ 		     title pubdate uri
 ;;
-	    
+
+ 
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
   let req = http_get_message "http://www.tbsradio.jp/ijuin/rss.xml" in
-  let aslink = cgi # argument_exists "aslink" in
+  let expression =
+    if cgi # argument_exists "aslink" then
+      Link
+    else if cgi # argument_exists "audio" then
+      Audio
+    else
+      DataSource in
   let listdata = 
     match req # status with
       `Successful ->
       let xmlstr = req # response_body # value in
       let format = Xmlplaylist.Podcast in
       let tracks = Xmlplaylist.tracks ~format xmlstr in
-      String.concat "" (List.map (track2html aslink) tracks)
+      String.concat "" (List.map (track2html expression) tracks)
     | _ -> "" in
   (* A Netcgi-based content provider *)
   cgi # set_header
@@ -49,16 +58,18 @@ let generate (cgi : Netcgi.cgi_activation) =
 	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
        "</head>\n" ^
 	 "  <body><div class=\"container\">" ^
-	   (if aslink then
-	     "<div class=\"list-group\">\n" 
-	    else
-	     "<ul class=\"list-group\">\n" 
+	   (match expression with
+	      Link -> "<div class=\"list-group\">\n"
+	    | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
+	       "<audio id=\"audio\" controls></audio>" ^
+	       "<ul class=\"list-group\">\n"
+	    | Audio -> "<ul class=\"list-group\">\n"
 	   ) ^
 	     listdata ^
-	       (if aslink then
-		  "</div>"
-		else
-		  "</ul>")^
+	       (match expression with
+		  Link -> "</div>"
+		| DataSource -> "</ul>"
+		| Audio -> "</ul>") ^
 	      "</body></html>" in
   cgi # output # output_string data;
   cgi # output # commit_work()
