@@ -25,10 +25,24 @@ let track2html expresssion track =
  		     title pubdate uri
 ;;
 
- 
+
+let episode_list_html expression url =
+  let req = http_get_message url in
+  match req # status with
+    `Successful ->
+    let xmlstr = req # response_body # value in
+    let format = Xmlplaylist.Podcast in
+    let tracks = Xmlplaylist.tracks ~format xmlstr in
+    String.concat "" (List.map (track2html expression) tracks)
+  | _ -> "" 
+;;
+
+let podcast_list = ["http://www.tbsradio.jp/bakusho/rss.xml";
+		    "http://www.tbsradio.jp/ijuin/rss.xml"]
+;;
+  
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
-  let req = http_get_message "http://www.tbsradio.jp/ijuin/rss.xml" in
   let expression =
     if cgi # argument_exists "aslink" then
       Link
@@ -36,14 +50,7 @@ let generate (cgi : Netcgi.cgi_activation) =
       Audio
     else
       DataSource in
-  let listdata = 
-    match req # status with
-      `Successful ->
-      let xmlstr = req # response_body # value in
-      let format = Xmlplaylist.Podcast in
-      let tracks = Xmlplaylist.tracks ~format xmlstr in
-      String.concat "" (List.map (track2html expression) tracks)
-    | _ -> "" in
+  let listdata = podcast_list |> List.map (episode_list_html expression) |> String.concat "\n" in
   (* A Netcgi-based content provider *)
   cgi # set_header
     ~cache:`No_cache
@@ -51,7 +58,7 @@ let generate (cgi : Netcgi.cgi_activation) =
     ();
   let data =
     "<html>\n" ^
-      "  <head><title>List</title>"^
+      "  <head><title>PodplayerWeb</title>"^
 	"<meta name=\"viewport\" content=\"width=device-width\" />"^
 	  "<link rel=\"stylesheet\" href=\"/resource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" ^
 	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
