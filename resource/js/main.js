@@ -10,12 +10,11 @@ $(function(){
     
     function play_item(item){
 	prepare_item(item)
-	var siblings = item.siblings();
-	if (siblings.length > 0){
-	    audio.bind("ended", function(){
-		play_item(siblings[0])
-	    });
-	}
+	var bros = item.next();
+	audio.on("ended", function(){
+	    play_item(bros)
+	});
+	// TODO: last item?
 	audio[0].play();
     }
    
