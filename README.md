@@ -77,7 +77,7 @@ Appendix: using eliom + docker
   1. build conainer
 
     ```
-    docker build -t eliom eliom_docke
+    docker build -t eliom eliom_docker
     ```
   2. run (build eliom app & run it)
 
