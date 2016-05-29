@@ -2,6 +2,10 @@ open Printf
 open Nethttp_client.Convenience
 
 type expresssion =  Link | Audio | DataSource
+
+(* TODO: config *)
+let podcast_list = ["http://www.tbsradio.jp/bakusho/rss.xml";
+		    "http://www.tbsradio.jp/ijuin/rss.xml"]
 ;;
 
 (* cannot get icon ... *)
@@ -37,10 +41,7 @@ let episode_list_html expression url =
   | _ -> "" 
 ;;
 
-let podcast_list = ["http://www.tbsradio.jp/bakusho/rss.xml";
-		    "http://www.tbsradio.jp/ijuin/rss.xml"]
-;;
-  
+ 
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
   let expression =

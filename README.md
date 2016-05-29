@@ -51,6 +51,8 @@ Files
 
 TODO
 ----
+* config with yml
+* sort by pubdate
 * get podcast xml using HTTP
   * async job
 * simple configuration to serve static file
