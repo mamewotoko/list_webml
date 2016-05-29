@@ -70,12 +70,14 @@ let generate (cgi : Netcgi.cgi_activation) =
 	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
 	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
        "</head>\n" ^
-	 "  <body><div class=\"container\">" ^
+	 "  <body>" ^
 	   (match expression with
-	      Link -> "<div class=\"list-group\">\n"
-	    | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
-	       "<audio id=\"audio\" controls></audio>" ^
-	       "<ul class=\"list-group\">\n"
+	      Link -> "<div class=\"container\"><div class=\"list-group\">\n"
+	      | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
+               "<nav class=\"navbar navbar-default navbar-fixed-top\">" ^
+ 	       "<div class=\"container\"><audio id=\"audio\" controls></audio></div>" ^
+               "</nav>" ^
+	       "<div class=\"container\"><ul id=\"podcast_list\" class=\"list-group\">\n"
 	    | Audio -> "<ul class=\"list-group\">\n"
 	   ) ^
 	     listdata ^
