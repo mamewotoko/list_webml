@@ -8,9 +8,9 @@ Overview
 Build (on host)
 ---------------
 1. [install ocaml & opam](https://ocaml.org/docs/install.html)
-2. install nethttpd package
+2. install opam packages
     ```
-    opam install -y nethttpd
+    sh setup-opam
     ```
 3. build
     ```
