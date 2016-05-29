@@ -65,6 +65,41 @@ TODO
   * with google account?
 * database
 
+Appendix: using eliom + docker
+-------------------------------
+* environment
+  * ruuning on docker on Ubuntu15.10
+  * not running docker on OS X
+* make sample app with following command. mysite directory is created
+
+  ```
+  eliom-distillery -name mysite -template basic.ppx -target-directory mysite
+  ```
+* Build
+  1. build conainer
+
+    ```
+    docker build -t eliom eliom_docker
+    ```
+  2. run (build eliom app & run it)
+
+    ```
+    run_eliom.sh
+    ```
+  3. browse http://localhost:8080
+
+Appendix: using eliom
+---------------------
+* Install
+  * install opam
+  * install ocaml4.02.3 and eliom package
+
+    ```
+    opam switch 4.02.3
+    eval `opam config env`
+    opam install eliom
+    ```
+
 ----
 Takashi Masuyama < mamewotoko@gmail.com >  
 http://mamewo.ddo.jp/
