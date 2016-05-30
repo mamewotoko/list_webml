@@ -5,8 +5,8 @@ type expresssion =  Link | Audio | DataSource
 
 (* TODO: config *)
 let podcast_list = ["http://www.nhk.or.jp/rj/podcast/rss/english.xml";
-"http://downloads.bbc.co.uk/podcasts/worldservice/tae/rss.xml";
 "http://feeds.wsjonline.com/wsj/podcast_wall_street_journal_this_morning?format=xml";
+"http://downloads.bbc.co.uk/podcasts/worldservice/tae/rss.xml";
 "http://learningenglish.voanews.com/podcast/";
 "http://www.tbsradio.jp/bakusho/rss.xml";
 "http://www.tbsradio.jp/ijuin/rss.xml"]
