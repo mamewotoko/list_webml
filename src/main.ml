@@ -25,7 +25,6 @@ let track2html expresssion track =
  		     title pubdate uri
 ;;
 
-
 let episode_list_html expression url =
   let req = http_get_message url in
   match req # status with
@@ -33,6 +32,7 @@ let episode_list_html expression url =
     let xmlstr = req # response_body # value in
     let format = Xmlplaylist.Podcast in
     let tracks = Xmlplaylist.tracks ~format xmlstr in
+    (* TODO: insert to mysql and filter new item *)
     String.concat "" (List.map (track2html expression) tracks)
   | _ -> "" 
 ;;

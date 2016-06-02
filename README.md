@@ -9,10 +9,12 @@ Build (on host)
 ---------------
 1. [install ocaml & opam](https://ocaml.org/docs/install.html)
 2. install nethttpd package
+
     ```
     opam install -y nethttpd
     ```
 3. build
+
     ```
     make 
     ```
@@ -53,6 +55,9 @@ TODO
 ----
 * get podcast xml using HTTP
   * async job
+  * periodical load
+* add podcast icon
+  * xmlplaylist does not return itunes:image element...
 * simple configuration to serve static file
   * use other http server like [ocsigen](http://ocsigen.org/)
   * use "404 Not Found" instead of "500 Internal Server Error"
