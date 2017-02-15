@@ -2,6 +2,14 @@ open Printf
 open Nethttp_client.Convenience
 
 type expresssion =  Link | Audio | DataSource
+
+(* TODO: config *)
+let podcast_list = ["http://www.nhk.or.jp/rj/podcast/rss/english.xml";
+"http://feeds.wsjonline.com/wsj/podcast_wall_street_journal_this_morning?format=xml";
+"http://downloads.bbc.co.uk/podcasts/worldservice/tae/rss.xml";
+"http://learningenglish.voanews.com/podcast/";
+"http://www.tbsradio.jp/bakusho/rss.xml";
+"http://www.tbsradio.jp/ijuin/rss.xml"]
 ;;
 
 (* cannot get icon ... *)
@@ -37,10 +45,7 @@ let episode_list_html expression url =
   | _ -> "" 
 ;;
 
-let podcast_list = ["http://www.tbsradio.jp/bakusho/rss.xml";
-		    "http://www.tbsradio.jp/ijuin/rss.xml"]
-;;
-  
+ 
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
   let expression =
@@ -50,6 +55,11 @@ let generate (cgi : Netcgi.cgi_activation) =
       Audio
     else
       DataSource in
+  let podcast_list =
+    if cgi # argument_exists "url" then
+      [cgi # argument_value "url"]
+    else
+      podcast_list in
   let listdata = podcast_list |> List.map (episode_list_html expression) |> String.concat "\n" in
   (* A Netcgi-based content provider *)
   cgi # set_header
@@ -65,12 +75,14 @@ let generate (cgi : Netcgi.cgi_activation) =
 	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
 	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
        "</head>\n" ^
-	 "  <body><div class=\"container\">" ^
+	 "  <body>" ^
 	   (match expression with
-	      Link -> "<div class=\"list-group\">\n"
-	    | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
-	       "<audio id=\"audio\" controls></audio>" ^
-	       "<ul class=\"list-group\">\n"
+	      Link -> "<div class=\"container\"><div class=\"list-group\">\n"
+	      | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
+               "<nav class=\"navbar navbar-default navbar-fixed-top\">" ^
+ 	       "<div class=\"container\" id=\"audio_container\" ><audio id=\"audio\" controls></audio></div>" ^
+               "</nav>" ^
+	       "<div class=\"container\"><ul id=\"podcast_list\" class=\"list-group\">\n"
 	    | Audio -> "<ul class=\"list-group\">\n"
 	   ) ^
 	     listdata ^

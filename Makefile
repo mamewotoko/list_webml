@@ -1,10 +1,12 @@
 OCAMLMAKEFILE=OCamlMakefile
 
 LIST_WEBML_OPTS = RESULT=list_webml SOURCES=src/main.ml PACKS=nethttpd,xmlplaylist,netclient,uri
-CLIENT_SAMPLE_OPTS = RESULT=client_sample SOURCES=src/client.ml PACKS=netclient
-ELIOM_OPTS = RESULT=eliom_sample SOURCES=src/eliom/eliom_main.ml PACKS=lwt,eliom
+#CLIENT_SAMPLE_OPTS = RESULT=client_sample SOURCES=src/client.ml PACKS=netclient
+SQLITE_SAMPLE_OPTS = RESULT=sqlite_sample SOURCES=sqlite_sample.ml PACKS=sqlite3
+#ELIOM_OPTS = RESULT=eliom_sample SOURCES=src/eliom/eliom_main.ml PACKS=lwt,eliom
 
-all: list_webml client_sample
+#client_sample sqlite_sample
+all: list_webml sqlite_sample
 
 list_webml: src/main.ml
 	make -f $(OCAMLMAKEFILE) $(LIST_WEBML_OPTS) nc
