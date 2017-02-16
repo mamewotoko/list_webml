@@ -2,8 +2,10 @@
 $(function(){
     var audio = $("#audio");
     function prepare_item(item){
-	$(".episode").removeClass("active")
-	item.addClass("active");
+	//$(".episode").removeClass("active")
+        //item.addClass("active");
+        $(".podcast_row").removeClass("active")
+        item.parent().parent().addClass("active");
 	var episode_src = item.attr("data-source");
 	audio.attr("src", episode_src);
     }
@@ -35,4 +37,5 @@ $(function(){
 	}
     });
     prepare_item($(".episode").first());
+    $('#podcast_list').DataTable({'paging': false});
 });
