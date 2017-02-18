@@ -4,6 +4,11 @@ open Nethttp_client.Convenience
 type expresssion =  Link | Audio | DataSource
 type order = Normal | Reversed
 
+let prefix = "podcast_player"
+let root_path = sprintf "/%s/" prefix
+let resource_path_regexp = Str.regexp (sprintf "^%s\\(.+\\)$" root_path)
+let static_path = "static"
+                        
 (* TODO: config *)
 let podcast_list = ["http://www.nhk.or.jp/rj/podcast/rss/english.xml";
 "http://feeds.wsjonline.com/wsj/podcast_wall_street_journal_this_morning?format=xml";
@@ -46,7 +51,6 @@ let episode_list_html expression url =
   | _ -> "" 
 ;;
 
- 
 (* TODO: call podcast fetch part in async way *)
 let generate (cgi : Netcgi.cgi_activation) =
   let expression =
@@ -71,17 +75,17 @@ let generate (cgi : Netcgi.cgi_activation) =
     "<html lang-\"ja\"><head><title>PodplayerWeb</title>\n"^
       "<meta charset=\"utf-8\" />"^
       "<meta name=\"viewport\" content=\"width=device-width\" />\n"^
-	"<link rel=\"stylesheet\" href=\"/resource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" ^
-	"<link rel=\"stylesheet\" href=\"/resource/css/main.css\" type=\"text/css\" />\n" ^
-	"<link rel=\"stylesheet\" href=\"resource/jquery/dataTables.bootstrap.min.css\" type=\"text/css\" />\n" ^
-	   "<script src=\"/resource/jquery/jquery-2.2.3.min.js\"></script>" ^
-	   "<script src=\"/resource/jquery/jquery.dataTables.min.js\"></script>" ^
-	   "<script src=\"/resource/bootstrap/js/bootstrap.min.js\"></script>" ^
+	(sprintf "<link rel=\"stylesheet\" href=\"%sresource/bootstrap/css/bootstrap.min.css\" type=\"text/css\" />\n" root_path)^
+	(sprintf "<link rel=\"stylesheet\" href=\"%sresource/css/main.css\" type=\"text/css\" />\n" root_path)^
+	(sprintf "<link rel=\"stylesheet\" href=\"%sresource/jquery/dataTables.bootstrap.min.css\" type=\"text/css\" />\n" root_path) ^
+	   (sprintf "<script src=\"%sresource/jquery/jquery-2.2.3.min.js\"></script>" root_path)^
+	   (sprintf "<script src=\"%sresource/jquery/jquery.dataTables.min.js\"></script>" root_path)^
+	   (sprintf "<script src=\"%sresource/bootstrap/js/bootstrap.min.js\"></script>" root_path)^
        "</head>\n" ^
 	 "  <body>" ^
 	   (match expression with
 	      Link -> "<div class=\"container\"><div class=\"list-group\">\n"
-	      | DataSource -> "<script src=\"/resource/js/main.js\"></script>" ^
+	      | DataSource -> (sprintf "<script src=\"%sresource/js/main.js\"></script>" root_path) ^
                "<nav class=\"navbar navbar-default navbar-fixed-top\">" ^
  	       "<div class=\"container\" id=\"audio_container\" ><audio id=\"audio\" controls></audio></div>" ^
                "</nav>" ^
@@ -98,8 +102,6 @@ let generate (cgi : Netcgi.cgi_activation) =
   cgi # output # commit_work()
 ;;
 
-let resource_path_regexp = Str.regexp "^/resource/"
-;;
   
 let on_request notification = 
   (* This function is called when the full HTTP request has been received. For
@@ -119,7 +121,7 @@ let on_request notification =
         notification # environment in
       let request_uri = env # cgi_request_uri |> Uri.of_string in
       let path = Uri.path request_uri in
-      if "/" = path then
+      if path = root_path then
 	let cgi =
           Netcgi_common.cgi_with_args
             (new Netcgi_common.cgi)
@@ -129,7 +131,7 @@ let on_request notification =
             (fun _ _ _ -> `Automatic) in
 	generate cgi;
       else if Str.string_match resource_path_regexp path 0 then
-      	let localpath = "."^path in
+        let localpath = Filename.concat static_path (Str.matched_group 1 path) in
       	let length = (Unix.stat localpath).Unix.st_size |> Int64.of_int in 
       	let fd = Unix.openfile localpath [Unix.O_RDONLY; Unix.O_NONBLOCK] 0o640 in
 	if Filename.check_suffix localpath ".css" then

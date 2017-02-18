@@ -1,6 +1,10 @@
 *~
 #*
 *#
+*.cmi
+*.cmx
+*.cmo
+*.o
 client_sample
 list_webml
 
