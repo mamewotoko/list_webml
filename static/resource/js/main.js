@@ -1,4 +1,3 @@
-
 $(function(){
     var audio = $("#audio");
     function prepare_item(item){
@@ -6,6 +5,7 @@ $(function(){
         //item.addClass("active");
         $(".podcast_row").removeClass("active")
         item.parent().parent().addClass("active");
+        item.parent().parent().find(".check").prop("checked", true);
 	var episode_src = item.attr("data-source");
 	audio.attr("src", episode_src);
     }
@@ -24,6 +24,7 @@ $(function(){
     
     $(".episode").click(function(){
 	console.log("class: " + $(this).hasClass("active"));
+        
 	if($(this).hasClass("active")){
 	    if(audio[0].paused){
 		audio[0].play();

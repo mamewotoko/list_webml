@@ -33,7 +33,7 @@ let track2html expresssion index track =
   match expresssion with
     Link -> sprintf "<a class=\"list-group-item\" href=\"%s\">%s %s</a>\n"
  		    uri title pubdate
-  | DataSource -> sprintf "<tr class=\"podcast_row\"><td>%d</td><td><a href=\"#\" class=\"episode\" data-source=\"%s\">%s<br>%s</a></td></tr>\n"
+  | DataSource -> sprintf "<tr class=\"podcast_row\"><td><input class=\"check\" type=\"checkbox\" /></td><td>%d</td><td><a class=\"episode\" data-source=\"%s\">%s<br>%s</a></td></tr>\n"
  			  (index+1) uri title pubdate
   | Audio -> sprintf "<li class=\"list-group-item\">%s %s<br><audio src=\"%s\" controls></audio></li>\n"
  		     title pubdate uri
@@ -89,7 +89,7 @@ let generate (cgi : Netcgi.cgi_activation) =
                "<nav class=\"navbar navbar-default navbar-fixed-top\">" ^
  	       "<div class=\"container\" id=\"audio_container\" ><audio id=\"audio\" controls></audio></div>" ^
                "</nav>" ^
-	       "<div class=\"container\"><table id=\"podcast_list\" class=\"table table-bordered\"><thead><tr><th>ID</th><th>Title</th></thead><tbody>\n"
+	       "<div class=\"container\"><table id=\"podcast_list\" class=\"table table-bordered\"><thead><tr><th>Listened</th><th>ID</th><th>Title</th></thead><tbody>\n"
 	    | Audio -> "<ul class=\"list-group\">\n"
 	   ) ^
 	     listdata ^
