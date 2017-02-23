@@ -6,7 +6,7 @@ SQLITE_SAMPLE_OPTS = RESULT=sqlite_sample SOURCES=sqlite_sample.ml PACKS=sqlite3
 #ELIOM_OPTS = RESULT=eliom_sample SOURCES=src/eliom/eliom_main.ml PACKS=lwt,eliom
 
 #client_sample sqlite_sample
-all: list_webml sqlite_sample
+all: list_webml 
 
 list_webml: src/main.ml
 	make -f $(OCAMLMAKEFILE) $(LIST_WEBML_OPTS) nc
