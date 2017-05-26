@@ -1,8 +1,7 @@
 OCAMLMAKEFILE=OCamlMakefile
 
-LIST_WEBML_OPTS = RESULT=list_webml SOURCES=src/main.ml PACKS=nethttpd,xmlplaylist,netclient,uri
-#CLIENT_SAMPLE_OPTS = RESULT=client_sample SOURCES=src/client.ml PACKS=netclient
-SQLITE_SAMPLE_OPTS = RESULT=sqlite_sample SOURCES=sqlite_sample.ml PACKS=sqlite3
+LIST_WEBML_OPTS = RESULT=list_webml SOURCES=src/main.ml PACKS=nethttpd,xmlplaylist,netclient,uri,getopt
+#SQLITE_SAMPLE_OPTS = RESULT=sqlite_sample SOURCES=sqlite_sample.ml PACKS=sqlite3
 #ELIOM_OPTS = RESULT=eliom_sample SOURCES=src/eliom/eliom_main.ml PACKS=lwt,eliom
 
 #client_sample sqlite_sample

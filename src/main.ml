@@ -1,5 +1,6 @@
 open Printf
 open Nethttp_client.Convenience
+open Getopt
 
 type expresssion =  Link | Audio | DataSource
 type order = Normal | Reversed
@@ -188,7 +189,7 @@ let rec accept ues srv_sock_acc =
                         acc_engine;
 ;;
 
-let start port =
+let start bind_address port =
   (* We set up [lstn_engine] whose only purpose is to create a server socket listening
    * on the specified port. When the socket is set up, [accept] is called.
    *)
@@ -200,7 +201,7 @@ let start port =
      Uq_engines.lstn_reuseaddr = true } in
   let lstn_engine =
     Uq_server.listener
-      (`Socket(`Sock_inet(Unix.SOCK_STREAM, Unix.inet_addr_any, port) ,opts)) ues in
+      (`Socket(`Sock_inet(Unix.SOCK_STREAM, bind_address, port) ,opts)) ues in
   Uq_engines.when_state ~is_done:(accept ues) lstn_engine;
   (* Start the main event loop. *)
   Unixqueue.run ues
@@ -229,14 +230,25 @@ let conf_debug() =
     Netsys_win32.Debug.debug_c_wrapper true
 ;;
 
+let print_usage() =
+  print_endline ("Usage: "^Sys.argv.(0)^" PORT")
+;;
+  
 let _ =
-  if Array.length Sys.argv != 2 then (
-    print_endline ("Usage: "^Sys.argv.(0)^" PORT");
-    exit 1
-  );
-  let port =
-    int_of_string Sys.argv.(1)
-  in
+  let bind_address_opt = ref "" in
+  let args = ref [] in
+  let specs = [
+      ('b', "", None, (atmost_once bind_address_opt (Error "only one output")));
+      ('h', "", Some(fun () -> print_usage(); Pervasives.exit 0), None)
+    ] in
+  parse_cmdline specs (fun x -> args := !args@[x]);
+  let bind_address =
+    if !bind_address_opt = "" then
+      Unix.inet_addr_loopback
+    else
+      Unix.inet_addr_of_string !bind_address_opt in
+  let port = int_of_string (List.nth !args 0) in
   Netsys_signal.init();
   conf_debug();
-  start port
+  start bind_address port
+;;

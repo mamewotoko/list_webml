@@ -1,1 +1,1 @@
-opam install -y ocamlnet xmlplaylist uri
+opam install -y ocamlnet xmlplaylist uri getopt
