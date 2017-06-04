@@ -50,8 +50,7 @@ let episode_list_html expression url =
       String.concat "" (List.mapi (track2html expression) tracks)
     | _ -> ""
   with e ->
-    printf "Uncaught exception: %s\n" (Printexc.to_string e);
-    flush stdout;
+    Netlog.logf `Err "Uncaught exception: %s" (Printexc.to_string e);
     ""
 ;;
 
@@ -146,8 +145,7 @@ let on_request notification =
 	  env # set_output_header_field "Content-Type" "image/png";
       	env # send_file fd length;
     with e ->
-      printf "Uncaught exception: %s\n" (Printexc.to_string e);
-      flush stdout
+      Netlog.logf `Err "Uncaught exception: %s" (Printexc.to_string e);
   );
   notification # schedule_finish()
 
@@ -196,8 +194,7 @@ let start bind_address port =
   (* We set up [lstn_engine] whose only purpose is to create a server socket listening
    * on the specified port. When the socket is set up, [accept] is called.
    *)
-  printf "Listening on port %d\n" port;
-  flush stdout;
+  Netlog.logf `Debug "Listening on port %d" port;
   let ues = Unixqueue.create_unix_event_system () in
   (* Unixqueue.set_debug_mode true; *)
   let opts = { Uq_server.default_listen_options with
