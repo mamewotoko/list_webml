@@ -12,11 +12,9 @@ let static_path = "static"
                         
 (* TODO: config *)
 let podcast_list = ["http://www.nhk.or.jp/rj/podcast/rss/english.xml";
-"http://feeds.wsjonline.com/wsj/podcast_wall_street_journal_this_morning?format=xml";
-"http://downloads.bbc.co.uk/podcasts/worldservice/tae/rss.xml";
-"http://learningenglish.voanews.com/podcast/";
-"http://www.tbsradio.jp/bakusho/rss.xml";
-"http://www.tbsradio.jp/ijuin/rss.xml"]
+                    "http://feeds.wsjonline.com/wsj/podcast_wall_street_journal_this_morning?format=xml";
+                    "http://downloads.bbc.co.uk/podcasts/worldservice/tae/rss.xml";
+                    "http://learningenglish.voanews.com/podcast/" ]
 ;;
 
 (* cannot get icon ... *)
@@ -41,15 +39,20 @@ let track2html expresssion index track =
 ;;
 
 let episode_list_html expression url =
-  let req = http_get_message url in
-  match req # status with
-    `Successful ->
-    let xmlstr = req # response_body # value in
-    let format = Xmlplaylist.Podcast in
-    let tracks = Xmlplaylist.tracks ~format xmlstr in
-    (* TODO: insert to mysql and filter new item *)
-    String.concat "" (List.mapi (track2html expression) tracks)
-  | _ -> "" 
+  try
+    let req = http_get_message url in
+    match req # status with
+      `Successful ->
+      let xmlstr = req # response_body # value in
+      let format = Xmlplaylist.Podcast in
+      let tracks = Xmlplaylist.tracks ~format xmlstr in
+      (* TODO: insert to mysql and filter new item *)
+      String.concat "" (List.mapi (track2html expression) tracks)
+    | _ -> ""
+  with e ->
+    printf "Uncaught exception: %s\n" (Printexc.to_string e);
+    flush stdout;
+    ""
 ;;
 
 (* TODO: call podcast fetch part in async way *)
